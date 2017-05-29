@@ -50,13 +50,13 @@ foreach ($files as $file) {
                                         if (strpos($object->Key, 'BatSoc') !== false && strpos($object->Key, 'BatSocErr') == false) {
                                             if ($object->Mean <= $WARNING && !$alreadyReported) {
                                                 if ($databaseObj->shouldIReport($object->Mean)) {
-                                                    $result = slack("{$SITE_NAME} WARNING: Power is below Warning Threshold ($WARNING). Power is currently **{$object->Mean}%**.");
+                                                    $result = slack("{$SITE_NAME} WARNING: Power is below Warning Threshold ($WARNING). Power is currently *{$object->Mean}%*.");
                                                     $databaseObj->addReport($SEVERITY_WARNING, time(), $object->Mean);
                                                     $alreadyReported = true;
                                                 }
                                             } elseif ($object->Mean <= $CRITICAL && !$alreadyReported) {
                                                 if ($databaseObj->shouldIReport($object->Mean)) {
-                                                    $result = slack("{$SITE_NAME} CRITICAL: Power is below CRITICAL Threshold ($CRITICAL). Power is currently **{$object->Mean}%**.");
+                                                    $result = slack("{$SITE_NAME} CRITICAL: Power is below CRITICAL Threshold ($CRITICAL). Power is currently *{$object->Mean}%*.");
                                                     $databaseObj->addReport($SEVERITY_CRITICAL, time(), $object->Mean);
                                                     $alreadyReported = true;
                                                 }
