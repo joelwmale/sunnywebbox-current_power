@@ -6,12 +6,12 @@
  * Time: 2:51 PM
  */
 
+$zip = new ZipArchive;
+
 $SITE_NAME = 'Greenswamp';
 $WARNING = 65;
 $CRITICAL = 50;
-
 $alreadyReported = false;
-$zip = new ZipArchive;
 
 $files = scandir('/tmp/sunny');
 foreach ($files as $file) {
