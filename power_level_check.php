@@ -5,13 +5,24 @@
  * Date: 29/05/2017
  * Time: 2:51 PM
  */
+require 'database.php';
 
 $zip = new ZipArchive;
+$databaseObj = new Database();
 
+/**
+ * Some usable class functions
+ */
 $SITE_NAME = 'Greenswamp';
 $WARNING = 65;
 $CRITICAL = 50;
 $alreadyReported = false;
+
+/**
+ * DO NOT CHANGE
+ */
+$SEVERITY_WARNING = 1;
+$SEVERITY_CRITICAL = 2;
 
 $files = scandir('/tmp/sunny');
 foreach ($files as $file) {
@@ -37,12 +48,20 @@ foreach ($files as $file) {
                                     foreach ($xml->MeanPublic as $object) {
                                         //var_dump($object);
                                         if (strpos($object->Key, 'BatSoc') !== false && strpos($object->Key, 'BatSocErr') == false) {
-                                            print $object->Mean . "\n\n";
                                             if ($object->Mean <= $WARNING && !$alreadyReported) {
-                                                $result = slack("WARNING: {$SITE_NAME} below {$WARNING}%.");
-                                                $alreadyReported = true;
+                                                if ($databaseObj->shouldIReport($object->Mean)) {
+                                                    $result = slack("{$SITE_NAME} WARNING: Power is below Warning Threshold ($WARNING). Power is currently **{$object->Mean}%**.");
+                                                    $databaseObj->addReport($SEVERITY_WARNING, time(), $object->Mean);
+                                                    $alreadyReported = true;
+                                                }
                                             } elseif ($object->Mean <= $CRITICAL && !$alreadyReported) {
-                                                $result = slack("CRITICAL: {$SITE_NAME} below {$CRITICAL}%.");
+                                                if ($databaseObj->shouldIReport($object->Mean)) {
+                                                    $result = slack("{$SITE_NAME} CRITICAL: Power is below CRITICAL Threshold ($CRITICAL). Power is currently **{$object->Mean}%**.");
+                                                    $databaseObj->addReport($SEVERITY_CRITICAL, time(), $object->Mean);
+                                                    $alreadyReported = true;
+                                                }
+                                            } elseif (!$alreadyReported) {
+                                                $databaseObj->addReport('3', time(), $object->Mean);
                                                 $alreadyReported = true;
                                             }
                                         }

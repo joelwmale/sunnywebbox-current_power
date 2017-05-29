@@ -41,8 +41,11 @@ class Database {
     public function shouldIReport($current_power_level) {
         $last_report = $this->getLastReport();
 
-        if ($current_power_level == $last_report->power_percent) {
+        if ($current_power_level == $last_report->power_percent ) {
             return false;
+        } elseif ($current_power_level >= ($last_report->power_percent + 5)) {
+            // Up by 5 so report
+            return true;
         } elseif (strtotime('-30 minutes') >= ($last_report->report_time)) {
             return true;
         } else {
