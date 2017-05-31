@@ -27,5 +27,5 @@ You can test the script by running
 You can ensure this runs automatically every minute by simply adding the following to your crontab:
 
 ```
-* * * * php power_level_check.php
+* * * * * php power_level_check.php
 ```
