@@ -7,8 +7,8 @@ $databaseObj = new Database();
 /**
  * Adjust these variables as per your settings.
  */
-$SITE_NAME = 'Greenswamp';
-$FILE_PATH = '/tmp/sunny'; // DO NOT HAVE A TRAILING / AT THE END OF THE STRING.
+$SITE_NAME = 'Power';
+$FILE_PATH = '/tmp/power'; // DO NOT HAVE A TRAILING / AT THE END OF THE STRING.
 
 // Levels at which the script should consider the power to be in a warning state, or a critical state.
 $WARNING = 65;
@@ -46,7 +46,6 @@ foreach ($files as $file) {
                                 if (file_exists("{$FILE_PATH}/current/mean/$meanFile") && strpos($meanFile, 'Mean') !== false) {
                                     $xml = simplexml_load_file("{$FILE_PATH}/current/mean/$meanFile");
                                     foreach ($xml->MeanPublic as $object) {
-                                        //var_dump($object);
                                         if (strpos($object->Key, 'BatSoc') !== false && strpos($object->Key, 'BatSocErr') == false) {
                                             if ($object->Mean <= $WARNING && !$alreadyReported) {
                                                 if ($databaseObj->shouldIReport($object->Mean)) {

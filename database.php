@@ -22,8 +22,6 @@ class Database {
     var $report_table_name = 'report_log';
 
     public function connectDb() {
-
-
         return new PDO("mysql:host={$this->database_host};dbname={$this->database_name}", $this->database_username, $this->database_password);
     }
 
@@ -43,7 +41,7 @@ class Database {
     public function addReport($severity, $report_time, $power_percent) {
         $db = $this->connectDb();
 
-        $stmt = $db->prepare("INSERT INTO report_log (severity, report_time, power_percent) VALUES (?, ?, ?)");
+        $stmt = $db->prepare("INSERT INTO {$this->report_table_name} (severity, report_time, power_percent) VALUES (?, ?, ?)");
         $result = $stmt->execute(array($severity, $report_time, $power_percent));
 
         if ($result) {
